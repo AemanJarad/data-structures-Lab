@@ -1,0 +1,88 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 5
+
+// Define the structure for the linked list node
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+// Function to create a new node
+Node* getnode(int data) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    if (!newNode) {
+        printf("Memory allocation error\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to insert a node at the end of the linked list
+void insert(Node** head, int data, int* size) {
+    if (*size >= MAX) {
+        printf("Linked list is full\n");
+        return;
+    }
+
+    Node* newNode = getnode(data);
+    (*size)++;
+
+    if (*head == NULL) {
+        *head = newNode;
+    } else {
+        Node* temp = *head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newNode;
+    }
+}
+
+// Function to print the linked list
+void printList(Node* head) {
+    Node* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Function to free the linked list
+void freeList(Node* head) {
+    Node* temp;
+    while (head != NULL) {
+        temp = head;
+        head = head->next;
+        free(temp);
+    }
+}
+
+int main() {
+    Node* head = NULL;
+    int size = 0;
+    int x;
+
+    printf("Enter integers to insert into the linked list (maximum %d elements). Enter 999 to stop.\n", MAX);
+
+    while (1) {
+        printf("Enter an integer: ");
+        scanf("%d", &x);
+        if (x == 999) {
+            break;
+        }
+        insert(&head, x, &size);
+    }
+
+    printf("Elements in the linked list:\n");
+    printList(head);
+
+    // Free the allocated memory
+    freeList(head);
+
+    return 0;
+}

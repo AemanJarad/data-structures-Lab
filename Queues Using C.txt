@@ -1,0 +1,76 @@
+#include <stdio.h>
+#define MAX 5
+
+// Function prototypes
+void ADDQ(char item, char Q[], int *rear);
+void DELETEQ(char Q[], int *front, int *rear, char deleted[], int *d_count);
+
+// Main function
+int main() {
+    char queue[MAX];
+    char deleted[MAX];
+    int front = -1;
+    int rear = -1;
+    int d_count = 0;
+    int num;
+    char item;
+    int choice;
+
+    while (1) {
+        printf("\n1. Insert\n2. Delete\n3. Exit\nEnter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                if (rear == MAX - 1) {
+                    printf("Queue is full\n");
+                } else {
+                    printf("Enter a number: ");
+                    scanf("%d", &num);
+                    if (num % 2 == 0) {
+                        item = 'E';
+                    } else {
+                        item = 'O';
+                    }
+                    ADDQ(item, queue, &rear);
+                    if (front == -1) {
+                        front = 0;
+                    }
+                }
+                break;
+            case 2:
+                if (front == -1 || front > rear) {
+                    printf("Queue is empty\n");
+                } else {
+                    DELETEQ(queue, &front, &rear, deleted, &d_count);
+                }
+                break;
+            case 3:
+                printf("Deleted elements: ");
+                for (int i = 0; i < d_count; i++) {
+                    printf("%c ", deleted[i]);
+                }
+                printf("\nExiting...\n");
+                return 0;
+            default:
+                printf("Invalid choice\n");
+        }
+    }
+    return 0;
+}
+
+// Function to add an item to the queue
+void ADDQ(char item, char Q[], int *rear) {
+    (*rear)++;
+    Q[*rear] = item;
+}
+
+// Function to delete an item from the queue
+void DELETEQ(char Q[], int *front, int *rear, char deleted[], int *d_count) {
+    char item = Q[*front];
+    deleted[*d_count] = item;
+    (*d_count)++;
+    (*front)++;
+    if (*front > *rear) {
+        *front = *rear = -1;  // Reset queue if empty
+    }
+}
